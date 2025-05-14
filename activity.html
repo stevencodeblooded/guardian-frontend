@@ -98,48 +98,42 @@
         <!-- Filters -->
         <div class="card mb-4">
           <div class="card-body">
-            <div class="row">
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label for="action-filter" class="form-label">Action Type:</label>
-                  <select id="action-filter" class="form-control">
-                    <option value="">All Actions</option>
-                    <option value="EXTENSION_INSTALLED">Extension Installed</option>
-                    <option value="EXTENSION_UNINSTALLED">Extension Uninstalled</option>
-                    <option value="EXTENSION_ENABLED">Extension Enabled</option>
-                    <option value="EXTENSION_DISABLED">Extension Disabled</option>
-                    <option value="WHITELIST_VIOLATION">Whitelist Violation</option>
-                    <option value="GUARDIAN_DISABLED">Guardian Disabled</option>
-                    <option value="GUARDIAN_UNINSTALL_ATTEMPT">Uninstall Attempt</option>
-                    <option value="COOKIES_CLEARED">Cookies Cleared</option>
-                    <option value="BROWSER_CLOSED">Browser Closed</option>
-                    <option value="LOGIN">Login</option>
-                    <option value="LOGOUT">Logout</option>
-                    <option value="WHITELIST_UPDATED">Whitelist Updated</option>
-                  </select>
-                </div>
+            <form class="filter-form" id="filter-form">
+              <div class="form-group">
+                <label for="action-filter" class="form-label">Action Type:</label>
+                <select id="action-filter" class="form-control">
+                  <option value="">All Actions</option>
+                  <option value="EXTENSION_INSTALLED">Extension Installed</option>
+                  <option value="EXTENSION_UNINSTALLED">Extension Uninstalled</option>
+                  <option value="EXTENSION_ENABLED">Extension Enabled</option>
+                  <option value="EXTENSION_DISABLED">Extension Disabled</option>
+                  <option value="WHITELIST_VIOLATION">Whitelist Violation</option>
+                  <option value="LOGIN">Login</option>
+                  <option value="LOGOUT">Logout</option>
+                  <option value="WHITELIST_UPDATED">Whitelist Updated</option>
+                </select>
               </div>
               
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label for="start-date" class="form-label">Start Date:</label>
+              <div class="form-group">
+                <label for="start-date" class="form-label">Start Date:</label>
+                <div class="date-input">
                   <input type="date" class="form-control" id="start-date">
+                  <i class="fas fa-calendar-alt calendar-icon"></i>
                 </div>
               </div>
               
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label for="end-date" class="form-label">End Date:</label>
+              <div class="form-group">
+                <label for="end-date" class="form-label">End Date:</label>
+                <div class="date-input">
                   <input type="date" class="form-control" id="end-date">
+                  <i class="fas fa-calendar-alt calendar-icon"></i>
                 </div>
               </div>
               
-              <div class="col-md-3 d-flex align-items-end">
-                <button class="btn btn-primary w-100" id="apply-filters">
-                  <i class="fas fa-filter mr-2"></i> Apply Filters
-                </button>
-              </div>
-            </div>
+              <button type="button" class="btn btn-primary filter-button" id="apply-filters">
+                <i class="fas fa-filter"></i> Apply Filters
+              </button>
+            </form>
           </div>
         </div>
         

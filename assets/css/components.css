@@ -511,3 +511,254 @@
     color: var(--text-muted);
     margin-bottom: var(--spacing-md);
   }
+
+  /* Enhanced form styles */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  font-weight: var(--font-weight-medium);
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+  font-size: var(--font-size-md);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: var(--font-size-md);
+  line-height: 1.5;
+  color: var(--text-color);
+  background-color: var(--card-background);
+  background-clip: padding-box;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+  border-color: var(--secondary-color);
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+/* Improved modal form layout */
+.modal-body .form-group:last-child {
+  margin-bottom: 0;
+}
+
+/* Styling for text areas */
+textarea.form-control {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Input with icons */
+.input-with-icon {
+  position: relative;
+}
+
+.input-with-icon .form-control {
+  padding-left: 2.5rem;
+}
+
+.input-with-icon .icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+}
+
+/* Switch toggle improvements */
+.switch {
+  width: 50px;
+  height: 26px;
+}
+
+.switch .slider {
+  border-radius: 26px;
+}
+
+.switch .slider:before {
+  height: 18px;
+  width: 18px;
+  left: 4px;
+  bottom: 4px;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+/* Small text helpers */
+.text-muted {
+  font-size: var(--font-size-sm);
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* Form errors with better visibility */
+.form-error {
+  color: var(--danger-color);
+  font-size: var(--font-size-sm);
+  margin-top: 0.5rem;
+  display: block;
+}
+
+
+
+
+
+
+
+
+/* Compact filter form styles for Activity Logs page */
+.filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-form .form-group {
+  flex: 1 1 250px;
+  margin-bottom: 1rem;
+}
+
+.filter-form .form-label {
+  font-size: var(--font-size-sm);
+  margin-bottom: 0.25rem;
+  font-weight: var(--font-weight-medium);
+}
+
+.filter-form .form-control {
+  padding: 0.5rem 0.75rem;
+  height: 38px;
+}
+
+.filter-form select.form-control {
+  background-position: right 0.5rem center;
+}
+
+.filter-form .date-input {
+  position: relative;
+}
+
+.filter-form .date-input .form-control {
+  padding-right: 2rem;
+}
+
+.filter-form .date-input .calendar-icon {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--text-muted);
+}
+
+/* Filter button styling */
+.filter-button {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.filter-button i {
+  font-size: 0.9rem;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .filter-form {
+    flex-wrap: nowrap;
+    align-items: flex-end;
+  }
+  
+  .filter-form .form-group {
+    margin-bottom: 0;
+  }
+  
+  .filter-button {
+    width: auto;
+    margin-top: 0;
+    margin-left: 0.5rem;
+    height: 38px;
+  }
+}
+
+/* More compact activity table */
+.activity-table {
+  font-size: var(--font-size-sm);
+}
+
+.activity-table th {
+  font-weight: var(--font-weight-medium);
+  padding: 0.6rem 0.5rem;
+  white-space: nowrap;
+}
+
+.activity-table td {
+  padding: 0.5rem;
+  vertical-align: middle;
+}
+
+/* Badge styling for activity types */
+.activity-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--border-radius-sm);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.badge-login {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.badge-logout {
+  background-color: var(--border-dark);
+  color: var(--text-color);
+}
+
+.badge-extension-enabled {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.badge-extension-disabled {
+  background-color: var(--muted-color);
+  color: white;
+}
+
+.badge-whitelist-violation {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+/* Compact detail button */
+.detail-button {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
