@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity Logs - Guardian Extension Admin</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/dashboard.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-brand">
+          <img src="assets/images/logo.png" alt="Guardian">
+          Guardian
+        </a>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">
+            <i class="fas fa-home nav-icon"></i>
+            Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="whitelist.html" class="nav-link">
+            <i class="fas fa-shield-alt nav-icon"></i>
+            Whitelist
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="config.html" class="nav-link">
+            <i class="fas fa-cog nav-icon"></i>
+            Configuration
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="activity.html" class="nav-link active">
+            <i class="fas fa-history nav-icon"></i>
+            Activity Logs
+          </a>
+        </li>
+        <li class="nav-item admin-only">
+          <a href="users.html" class="nav-link">
+            <i class="fas fa-users nav-icon"></i>
+            User Management
+          </a>
+        </li>
+      </ul>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <button class="menu-toggle" id="menu-toggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h2 class="mb-0">Activity Logs</h2>
+        </div>
+        
+        <div class="header-right">
+          <div class="user-menu" id="user-menu">
+            <button class="user-menu-button" id="user-menu-button">
+              <img src="assets/images/avatar.png" alt="User">
+              <span class="user-name" id="user-name">Loading...</span>
+              <i class="fas fa-chevron-down ml-2"></i>
+            </button>
+            
+            <div class="user-menu-dropdown" id="user-menu-dropdown">
+              <a href="#" class="user-menu-item" id="profile-link">
+                <i class="fas fa-user mr-2"></i> Profile
+              </a>
+              <div class="user-menu-divider"></div>
+              <a href="#" class="user-menu-item" id="logout-link">
+                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      <!-- Content -->
+      <div class="content">
+        <div class="page-title">
+          <h1>Activity Logs</h1>
+        </div>
+        
+        <!-- Filters -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="action-filter" class="form-label">Action Type:</label>
+                  <select id="action-filter" class="form-control">
+                    <option value="">All Actions</option>
+                    <option value="EXTENSION_INSTALLED">Extension Installed</option>
+                    <option value="EXTENSION_UNINSTALLED">Extension Uninstalled</option>
+                    <option value="EXTENSION_ENABLED">Extension Enabled</option>
+                    <option value="EXTENSION_DISABLED">Extension Disabled</option>
+                    <option value="WHITELIST_VIOLATION">Whitelist Violation</option>
+                    <option value="GUARDIAN_DISABLED">Guardian Disabled</option>
+                    <option value="GUARDIAN_UNINSTALL_ATTEMPT">Uninstall Attempt</option>
+                    <option value="COOKIES_CLEARED">Cookies Cleared</option>
+                    <option value="BROWSER_CLOSED">Browser Closed</option>
+                    <option value="LOGIN">Login</option>
+                    <option value="LOGOUT">Logout</option>
+                    <option value="WHITELIST_UPDATED">Whitelist Updated</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="start-date" class="form-label">Start Date:</label>
+                  <input type="date" class="form-control" id="start-date">
+                </div>
+              </div>
+              
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="end-date" class="form-label">End Date:</label>
+                  <input type="date" class="form-control" id="end-date">
+                </div>
+              </div>
+              
+              <div class="col-md-3 d-flex align-items-end">
+                <button class="btn btn-primary w-100" id="apply-filters">
+                  <i class="fas fa-filter mr-2"></i> Apply Filters
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Logs Table -->
+        <div class="card">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table" id="logs-table">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Action</th>
+                    <th>User</th>
+                    <th>Extension ID</th>
+                    <th>IP Address</th>
+                    <th>Details</th>
+                  </tr>
+                </thead>
+                <tbody id="logs-table-body">
+                  <tr>
+                    <td colspan="6">
+                      <div class="spinner-container">
+                        <div class="spinner"></div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="d-flex justify-content-between align-items-center mt-4" id="pagination-container">
+              <div class="pagination-info">
+                Showing <span id="showing-start">0</span> to <span id="showing-end">0</span> of <span id="total-logs">0</span> logs
+              </div>
+              
+              <ul class="pagination" id="pagination">
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" id="prev-page">
+                    <i class="fas fa-chevron-left"></i>
+                  </a>
+                </li>
+                <li class="page-item active">
+                  <a class="page-link" href="#">1</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="#" id="next-page">
+                    <i class="fas fa-chevron-right"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            
+            <!-- Empty state -->
+            <div id="empty-state" class="empty-state d-none">
+              <div class="empty-state-icon">
+                <i class="fas fa-history"></i>
+              </div>
+              <h3 class="empty-state-title">No Activity Logs Found</h3>
+              <p class="empty-state-description">There are no activity logs matching your filters.</p>
+              <button class="btn btn-primary" id="clear-filters-btn">
+                <i class="fas fa-times mr-2"></i> Clear Filters
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- View Log Details Modal -->
+  <div class="modal-overlay" id="log-details-modal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title">Log Details</h3>
+        <button class="modal-close" id="close-log-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="log-details">
+          <div class="form-group">
+            <label class="form-label">Action</label>
+            <p id="log-action" class="mb-3"></p>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Timestamp</label>
+            <p id="log-timestamp" class="mb-3"></p>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">User ID</label>
+            <p id="log-user-id" class="mb-3"></p>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Extension ID</label>
+            <p id="log-extension-id" class="mb-3"></p>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">IP Address</label>
+            <p id="log-ip-address" class="mb-3"></p>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Browser Info</label>
+            <pre id="log-browser-info" class="code-block mb-3"></pre>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Details</label>
+            <pre id="log-details" class="code-block mb-3"></pre>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="close-details">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/api/api.js"></script>
+  <script src="assets/js/api/auth.js"></script>
+  <script src="assets/js/api/activity.js"></script>
+  <script src="assets/js/utils/auth.js"></script>
+  <script src="assets/js/components/toast.js"></script>
+  <script src="assets/js/components/modal.js"></script>
+  <script src="assets/js/pages/activity.js"></script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Guardian Extension Admin</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/auth.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-logo">
+          <img src="assets/images/logo.png" alt="Guardian Extension Logo">
+        </div>
+        <h1 class="auth-title">Guardian Extension</h1>
+        <p class="auth-subtitle">Admin Dashboard</p>
+      </div>
+      
+      <div class="auth-body">
+        <div id="alerts-container"></div>
+        
+        <form id="login-form" class="auth-form">
+          <div class="form-group">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+            <div id="email-error" class="form-error"></div>
+          </div>
+          
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+            <div id="password-error" class="form-error"></div>
+          </div>
+          
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="remember" name="remember">
+            <label class="form-check-label" for="remember">Remember me</label>
+          </div>
+          
+          <button type="submit" class="btn btn-primary auth-submit" id="login-button">
+            <span class="btn-text">Login</span>
+            <span class="spinner-border spinner-border-sm d-none" id="login-spinner" role="status" aria-hidden="true"></span>
+          </button>
+        </form>
+      </div>
+      
+      <div class="auth-footer">
+        <div class="auth-links">
+          <a href="reset-password.html" class="auth-link">Forgot password?</a>
+          <a href="register.html" class="auth-link">Create an account</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/api/api.js"></script>
+  <script src="assets/js/api/auth.js"></script>
+  <script src="assets/js/utils/auth.js"></script>
+  <script src="assets/js/utils/validation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is already logged in
+      if (AuthUtils.isAuthenticated()) {
+        window.location.href = 'index.html';
+      }
+
+      const loginForm = document.getElementById('login-form');
+      const loginButton = document.getElementById('login-button');
+      const loginSpinner = document.getElementById('login-spinner');
+      const alertsContainer = document.getElementById('alerts-container');
+      
+      // Show alert message function
+      function showAlert(message, type = 'danger') {
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type}`;
+        alert.textContent = message;
+        
+        alertsContainer.innerHTML = '';
+        alertsContainer.appendChild(alert);
+        
+        // Auto dismiss after 5 seconds
+        setTimeout(() => {
+          alert.remove();
+        }, 5000);
+      }
+      
+      // Handle login form submission
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Reset error messages
+        document.querySelectorAll('.form-error').forEach(el => el.textContent = '');
+        
+        // Get form data
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const remember = document.getElementById('remember').checked;
+        
+        // Simple validation
+        let hasErrors = false;
+        
+        if (!ValidationUtils.isValidEmail(email)) {
+          document.getElementById('email-error').textContent = 'Please enter a valid email address';
+          hasErrors = true;
+        }
+        
+        if (!password) {
+          document.getElementById('password-error').textContent = 'Password is required';
+          hasErrors = true;
+        }
+        
+        if (hasErrors) return;
+        
+        // Show loading state
+        loginButton.disabled = true;
+        loginButton.querySelector('.btn-text').textContent = 'Logging in...';
+        loginSpinner.classList.remove('d-none');
+        
+        try {
+          // Call login API
+          const response = await AuthAPI.login(email, password);
+          
+          // Store auth token
+          AuthUtils.setToken(response.token, remember);
+          
+          // Store user data
+          AuthUtils.setUser(response.user);
+          
+          // Redirect to dashboard
+          window.location.href = 'index.html';
+        } catch (error) {
+          // Show error message
+          if (error.status === 401) {
+            showAlert('Invalid email or password. Please try again.');
+          } else {
+            showAlert(error.message || 'An error occurred during login. Please try again.');
+          }
+          
+          // Reset loading state
+          loginButton.disabled = false;
+          loginButton.querySelector('.btn-text').textContent = 'Login';
+          loginSpinner.classList.add('d-none');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

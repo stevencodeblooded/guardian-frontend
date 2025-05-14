@@ -1,0 +1,51 @@
+# Guardian Extension Admin Dashboard - Project Structure
+
+```
+admin-dashboard/
+├── assets/
+│   ├── css/
+│   │   ├── styles.css          # Main stylesheet
+│   │   ├── auth.css            # Authentication pages styles
+│   │   ├── dashboard.css       # Dashboard styles
+│   │   └── components.css      # Reusable component styles
+│   ├── js/
+│   │   ├── api/
+│   │   │   ├── auth.js         # Authentication API
+│   │   │   ├── whitelist.js    # Whitelist API
+│   │   │   ├── config.js       # Configuration API
+│   │   │   ├── activity.js     # Activity Logs API
+│   │   │   └── api.js          # Base API utilities
+│   │   ├── utils/
+│   │   │   ├── auth.js         # Authentication utilities
+│   │   │   ├── validation.js   # Form validation
+│   │   │   └── utils.js        # General utilities
+│   │   ├── components/
+│   │   │   ├── navbar.js       # Navigation bar
+│   │   │   ├── sidebar.js      # Sidebar
+│   │   │   ├── modal.js        # Modal component
+│   │   │   └── toast.js        # Toast notifications
+│   │   └── pages/
+│   │       ├── dashboard.js    # Dashboard page
+│   │       ├── whitelist.js    # Whitelist management page
+│   │       ├── config.js       # Configuration page
+│   │       ├── activity.js     # Activity logs page
+│   │       └── users.js        # User management page
+│   └── images/
+│       ├── logo.png            # Guardian logo
+│       ├── icons/              # UI icons
+│       └── backgrounds/        # Background images
+├── index.html                 # Entry point / Dashboard
+├── login.html                 # Login page
+├── register.html              # Registration page
+├── reset-password.html        # Password reset page
+├── whitelist.html             # Whitelist management page
+├── config.html                # Configuration settings page
+├── activity.html              # Activity logs page
+└── users.html                 # User management page
+```
+
+This structure organizes the admin dashboard into a clear hierarchy with:
+- Separate HTML pages for each main section
+- CSS files organized by function
+- JavaScript modules separated by responsibility
+- API integration modules that match backend endpoints

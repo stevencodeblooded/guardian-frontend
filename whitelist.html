@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whitelist Management - Guardian Extension Admin</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/dashboard.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-brand">
+          <img src="assets/images/logo.png" alt="Guardian">
+          Guardian
+        </a>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">
+            <i class="fas fa-home nav-icon"></i>
+            Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="whitelist.html" class="nav-link active">
+            <i class="fas fa-shield-alt nav-icon"></i>
+            Whitelist
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="config.html" class="nav-link">
+            <i class="fas fa-cog nav-icon"></i>
+            Configuration
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="activity.html" class="nav-link">
+            <i class="fas fa-history nav-icon"></i>
+            Activity Logs
+          </a>
+        </li>
+        <li class="nav-item admin-only">
+          <a href="users.html" class="nav-link">
+            <i class="fas fa-users nav-icon"></i>
+            User Management
+          </a>
+        </li>
+      </ul>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <button class="menu-toggle" id="menu-toggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h2 class="mb-0">Whitelist Management</h2>
+        </div>
+        
+        <div class="header-right">
+          <div class="user-menu" id="user-menu">
+            <button class="user-menu-button" id="user-menu-button">
+              <img src="assets/images/avatar.png" alt="User">
+              <span class="user-name" id="user-name">Loading...</span>
+              <i class="fas fa-chevron-down ml-2"></i>
+            </button>
+            
+            <div class="user-menu-dropdown" id="user-menu-dropdown">
+              <a href="#" class="user-menu-item" id="profile-link">
+                <i class="fas fa-user mr-2"></i> Profile
+              </a>
+              <div class="user-menu-divider"></div>
+              <a href="#" class="user-menu-item" id="logout-link">
+                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      <!-- Content -->
+      <div class="content">
+        <div class="page-title">
+          <h1>Extension Whitelist</h1>
+          <button class="btn btn-primary" id="add-extension-btn">
+            <i class="fas fa-plus mr-2"></i> Add Extension
+          </button>
+        </div>
+        
+        <!-- Filter and search -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="form-group mb-0">
+                <label for="status-filter" class="form-label mr-2">Status:</label>
+                <select id="status-filter" class="form-control">
+                  <option value="all">All Extensions</option>
+                  <option value="true">Active Only</option>
+                  <option value="false">Inactive Only</option>
+                </select>
+              </div>
+              
+              <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="form-control search-input" id="search-input" placeholder="Search extensions...">
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Whitelist table -->
+        <div class="card">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table" id="whitelist-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Extension ID</th>
+                    <th>Version</th>
+                    <th>Added By</th>
+                    <th>Date Added</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="whitelist-table-body">
+                  <tr>
+                    <td colspan="7">
+                      <div class="spinner-container">
+                        <div class="spinner"></div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- Empty state -->
+            <div id="empty-state" class="empty-state d-none">
+              <div class="empty-state-icon">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <h3 class="empty-state-title">No Extensions Found</h3>
+              <p class="empty-state-description">There are no extensions in the whitelist.</p>
+              <button class="btn btn-primary" id="empty-add-btn">
+                <i class="fas fa-plus mr-2"></i> Add Extension
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Add Extension Modal -->
+  <div class="modal-overlay" id="add-extension-modal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Extension to Whitelist</h3>
+        <button class="modal-close" id="close-add-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="add-extension-form">
+          <div class="form-group">
+            <label for="extension-id" class="form-label">Extension ID</label>
+            <input type="text" class="form-control" id="extension-id" name="extensionId" placeholder="Enter Chrome extension ID (32 characters)" required>
+            <div id="extension-id-error" class="form-error"></div>
+            <small class="text-muted">Example: hdhomebjnbanjncdgfiomndjgbefnpih</small>
+          </div>
+          
+          <div class="form-group">
+            <label for="extension-name" class="form-label">Extension Name</label>
+            <input type="text" class="form-control" id="extension-name" name="name" placeholder="Enter extension name" required>
+            <div id="extension-name-error" class="form-error"></div>
+          </div>
+          
+          <div class="form-group">
+            <label for="extension-description" class="form-label">Description (optional)</label>
+            <textarea class="form-control" id="extension-description" name="description" rows="3" placeholder="Enter extension description"></textarea>
+            <div id="extension-description-error" class="form-error"></div>
+          </div>
+          
+          <div class="form-group">
+            <label for="extension-version" class="form-label">Version (optional)</label>
+            <input type="text" class="form-control" id="extension-version" name="version" placeholder="Enter extension version">
+            <div id="extension-version-error" class="form-error"></div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancel-add">Cancel</button>
+        <button class="btn btn-primary" id="save-extension" type="button">
+          <span class="btn-text">Add to Whitelist</span>
+          <span class="spinner-border spinner-border-sm d-none" id="add-spinner" role="status" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Extension Modal -->
+  <div class="modal-overlay" id="edit-extension-modal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title">Edit Extension</h3>
+        <button class="modal-close" id="close-edit-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="edit-extension-form">
+          <div class="form-group">
+            <label for="edit-extension-id" class="form-label">Extension ID</label>
+            <input type="text" class="form-control" id="edit-extension-id" name="extensionId" disabled>
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-extension-name" class="form-label">Extension Name</label>
+            <input type="text" class="form-control" id="edit-extension-name" name="name" placeholder="Enter extension name" required>
+            <div id="edit-extension-name-error" class="form-error"></div>
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-extension-description" class="form-label">Description (optional)</label>
+            <textarea class="form-control" id="edit-extension-description" name="description" rows="3" placeholder="Enter extension description"></textarea>
+            <div id="edit-extension-description-error" class="form-error"></div>
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-extension-version" class="form-label">Version (optional)</label>
+            <input type="text" class="form-control" id="edit-extension-version" name="version" placeholder="Enter extension version">
+            <div id="edit-extension-version-error" class="form-error"></div>
+          </div>
+          
+          <div class="form-group">
+            <label for="extension-status" class="form-label d-block">Status</label>
+            <label class="switch">
+              <input type="checkbox" id="extension-status" checked>
+              <span class="slider"></span>
+            </label>
+            <span id="status-label" class="ml-2">Active</span>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancel-edit">Cancel</button>
+        <button class="btn btn-primary" id="update-extension">
+          <span class="btn-text">Update Extension</span>
+          <span class="spinner-border spinner-border-sm d-none" id="edit-spinner" role="status" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Extension Modal -->
+  <div class="modal-overlay" id="view-extension-modal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title">Extension Details</h3>
+        <button class="modal-close" id="close-view-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="extension-details">
+          <div class="form-group">
+            <label class="form-label">Extension ID</label>
+            <p id="view-extension-id" class="mb-3"></p>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Name</label>
+            <p id="view-extension-name" class="mb-3"></p>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <p id="view-extension-description" class="mb-3"></p>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Version</label>
+            <p id="view-extension-version" class="mb-3"></p>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <p id="view-extension-status" class="mb-3"></p>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Added By</label>
+            <p id="view-extension-added-by" class="mb-3"></p>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Date Added</label>
+            <p id="view-extension-date" class="mb-3"></p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="close-view">Close</button>
+        <button class="btn btn-primary admin-only" id="view-edit-btn">Edit Extension</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal for Delete -->
+  <div class="modal-overlay" id="delete-confirm-modal">
+    <div class="modal-container modal-sm">
+      <div class="modal-header">
+        <h3 class="modal-title">Confirm Deletion</h3>
+        <button class="modal-close" id="close-delete-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to remove <strong id="delete-extension-name"></strong> from the whitelist?</p>
+        <p class="text-danger">This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancel-delete">Cancel</button>
+        <button class="btn btn-danger" id="confirm-delete">
+          <span class="btn-text">Delete</span>
+          <span class="spinner-border spinner-border-sm d-none" id="delete-spinner" role="status" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/api/api.js"></script>
+  <script src="assets/js/api/auth.js"></script>
+  <script src="assets/js/api/whitelist.js"></script>
+  <script src="assets/js/utils/auth.js"></script>
+  <script src="assets/js/utils/validation.js"></script>
+  <script src="assets/js/components/toast.js"></script>
+  <script src="assets/js/components/modal.js"></script>
+  <script src="assets/js/pages/whitelist.js"></script>
+</body>
+</html>

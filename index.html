@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Guardian Extension Admin</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/dashboard.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+</head>
+<body>
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-brand">
+          <img src="assets/images/logo.png" alt="Guardian">
+          Guardian
+        </a>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link active">
+            <i class="fas fa-home nav-icon"></i>
+            Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="whitelist.html" class="nav-link">
+            <i class="fas fa-shield-alt nav-icon"></i>
+            Whitelist
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="config.html" class="nav-link">
+            <i class="fas fa-cog nav-icon"></i>
+            Configuration
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="activity.html" class="nav-link">
+            <i class="fas fa-history nav-icon"></i>
+            Activity Logs
+          </a>
+        </li>
+        <li class="nav-item admin-only">
+          <a href="users.html" class="nav-link">
+            <i class="fas fa-users nav-icon"></i>
+            User Management
+          </a>
+        </li>
+      </ul>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <button class="menu-toggle" id="menu-toggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h2 class="mb-0">Dashboard</h2>
+        </div>
+        
+        <div class="header-right">
+          <div class="user-menu" id="user-menu">
+            <button class="user-menu-button" id="user-menu-button">
+              <img src="assets/images/avatar.png" alt="User">
+              <span class="user-name" id="user-name">Loading...</span>
+              <i class="fas fa-chevron-down ml-2"></i>
+            </button>
+            
+            <div class="user-menu-dropdown" id="user-menu-dropdown">
+              <a href="#" class="user-menu-item" id="profile-link">
+                <i class="fas fa-user mr-2"></i> Profile
+              </a>
+              <div class="user-menu-divider"></div>
+              <a href="#" class="user-menu-item" id="logout-link">
+                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      <!-- Content -->
+      <div class="content">
+        <!-- Top Stats -->
+        <div class="dashboard-cards">
+          <div class="stat-card" id="whitelist-count-card">
+            <div class="stat-card-icon bg-primary text-white">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="stat-card-value" id="whitelist-count">0</div>
+            <div class="stat-card-label">Whitelisted Extensions</div>
+          </div>
+          
+          <div class="stat-card" id="blocked-count-card">
+            <div class="stat-card-icon bg-danger text-white">
+              <i class="fas fa-ban"></i>
+            </div>
+            <div class="stat-card-value" id="blocked-count">0</div>
+            <div class="stat-card-label">Blocked Attempts</div>
+          </div>
+          
+          <div class="stat-card" id="active-users-card">
+            <div class="stat-card-icon bg-success text-white">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-card-value" id="active-users">0</div>
+            <div class="stat-card-label">Active Users</div>
+          </div>
+          
+          <div class="stat-card" id="total-logs-card">
+            <div class="stat-card-icon bg-warning text-white">
+              <i class="fas fa-history"></i>
+            </div>
+            <div class="stat-card-value" id="total-logs">0</div>
+            <div class="stat-card-label">Total Logs</div>
+          </div>
+        </div>
+        
+        <!-- Two Column Layout -->
+        <div class="two-column">
+          <!-- Left Column: Activity Chart -->
+          <div class="chart-container">
+            <div class="chart-header">
+              <h3 class="chart-title">Activity Over Time</h3>
+              <div class="chart-options">
+                <select id="chart-period" class="form-control">
+                  <option value="30">Last 30 Days</option>
+                  <option value="14">Last 14 Days</option>
+                  <option value="7">Last 7 Days</option>
+                </select>
+              </div>
+            </div>
+            <div class="chart-body">
+              <canvas id="activity-chart"></canvas>
+            </div>
+          </div>
+          
+          <!-- Right Column: Action Types -->
+          <div class="chart-container">
+            <div class="chart-header">
+              <h3 class="chart-title">Action Types</h3>
+            </div>
+            <div class="chart-body">
+              <canvas id="action-types-chart"></canvas>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Recent Activity -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="mb-0">Recent Activity</h3>
+            <a href="activity.html" class="btn btn-sm btn-primary">View All</a>
+          </div>
+          <div class="card-body">
+            <div id="recent-activity-container">
+              <div class="spinner-container">
+                <div class="spinner"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Profile Modal -->
+  <div class="modal-overlay" id="profile-modal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title">Profile</h3>
+        <button class="modal-close" id="close-profile-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="profile-form">
+          <div class="form-group">
+            <label for="profile-name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="profile-name" name="name" required>
+            <div id="profile-name-error" class="form-error"></div>
+          </div>
+          
+          <div class="form-group">
+            <label for="profile-email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="profile-email" name="email" disabled>
+          </div>
+          
+          <div class="form-group">
+            <label for="profile-role" class="form-label">Role</label>
+            <input type="text" class="form-control" id="profile-role" name="role" disabled>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancel-profile">Cancel</button>
+        <button class="btn btn-primary" id="save-profile">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Change Password Modal -->
+  <div class="modal-overlay" id="password-modal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title">Change Password</h3>
+        <button class="modal-close" id="close-password-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="password-form">
+          <div class="form-group">
+            <label for="current-password" class="form-label">Current Password</label>
+            <input type="password" class="form-control" id="current-password" name="currentPassword" required>
+            <div id="current-password-error" class="form-error"></div>
+          </div>
+          
+          <div class="form-group">
+            <label for="new-password" class="form-label">New Password</label>
+            <input type="password" class="form-control" id="new-password" name="newPassword" required>
+            <div id="new-password-error" class="form-error"></div>
+            
+            <div class="password-strength">
+              <div class="password-strength-meter">
+                <div class="password-strength-value"></div>
+              </div>
+              <span class="password-strength-label"></span>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="confirm-password" class="form-label">Confirm New Password</label>
+            <input type="password" class="form-control" id="confirm-password" name="confirmPassword" required>
+            <div id="confirm-password-error" class="form-error"></div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancel-password">Cancel</button>
+        <button class="btn btn-primary" id="save-password">Change Password</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/api/api.js"></script>
+  <script src="assets/js/api/auth.js"></script>
+  <script src="assets/js/api/whitelist.js"></script>
+  <script src="assets/js/api/config.js"></script>
+  <script src="assets/js/api/activity.js"></script>
+  <script src="assets/js/utils/auth.js"></script>
+  <script src="assets/js/utils/validation.js"></script>
+  <script src="assets/js/components/toast.js"></script>
+  <script src="assets/js/components/modal.js"></script>
+  <script src="assets/js/pages/dashboard.js"></script>
+</body>
+</html>

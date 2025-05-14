@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Management - Guardian Extension Admin</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/dashboard.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-brand">
+          <img src="assets/images/logo.png" alt="Guardian">
+          Guardian
+        </a>
+        <button class="sidebar-toggle" id="sidebar-toggle">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">
+            <i class="fas fa-home nav-icon"></i>
+            Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="whitelist.html" class="nav-link">
+            <i class="fas fa-shield-alt nav-icon"></i>
+            Whitelist
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="config.html" class="nav-link">
+            <i class="fas fa-cog nav-icon"></i>
+            Configuration
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="activity.html" class="nav-link">
+            <i class="fas fa-history nav-icon"></i>
+            Activity Logs
+          </a>
+        </li>
+        <li class="nav-item admin-only">
+          <a href="users.html" class="nav-link active">
+            <i class="fas fa-users nav-icon"></i>
+            User Management
+          </a>
+        </li>
+      </ul>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <button class="menu-toggle" id="menu-toggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h2 class="mb-0">User Management</h2>
+        </div>
+        
+        <div class="header-right">
+          <div class="user-menu" id="user-menu">
+            <button class="user-menu-button" id="user-menu-button">
+              <img src="assets/images/avatar.png" alt="User">
+              <span class="user-name" id="user-name">Loading...</span>
+              <i class="fas fa-chevron-down ml-2"></i>
+            </button>
+            
+            <div class="user-menu-dropdown" id="user-menu-dropdown">
+              <a href="#" class="user-menu-item" id="profile-link">
+                <i class="fas fa-user mr-2"></i> Profile
+              </a>
+              <div class="user-menu-divider"></div>
+              <a href="#" class="user-menu-item" id="logout-link">
+                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      <!-- Content -->
+      <div class="content">
+        <div class="page-title">
+          <h1>User Management</h1>
+          <button class="btn btn-primary" id="add-user-btn">
+            <i class="fas fa-plus mr-2"></i> Add New User
+          </button>
+        </div>
+        
+        <!-- Users Table -->
+        <div class="card">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table" id="users-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Last Login</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="users-table-body">
+                  <tr>
+                    <td colspan="6">
+                      <div class="spinner-container">
+                        <div class="spinner"></div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- Empty state -->
+            <div id="empty-state" class="empty-state d-none">
+              <div class="empty-state-icon">
+                <i class="fas fa-users"></i>
+              </div>
+              <h3 class="empty-state-title">No Users Found</h3>
+              <p class="empty-state-description">There are no users in the system.</p>
+              <button class="btn btn-primary" id="empty-add-btn">
+                <i class="fas fa-plus mr-2"></i> Add New User
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Add User Modal -->
+  <div class="modal-overlay" id="add-user-modal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title">Add User</h3>
+        <button class="modal-close" id="close-add-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="add-user-form">
+          <div class="form-group">
+            <label for="user-name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="user-name-input" name="name" placeholder="Enter full name" required>
+            <div id="user-name-error" class="form-error"></div>
+          </div>
+          
+          <div class="form-group">
+            <label for="user-email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="user-email" name="email" placeholder="Enter email address" required>
+            <div id="user-email-error" class="form-error"></div>
+          </div>
+          
+          <div class="form-group">
+            <label for="user-password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="user-password" name="password" placeholder="Enter password" required>
+            <div id="user-password-error" class="form-error"></div>
+            
+            <div class="password-strength" id="password-strength">
+              <div class="password-strength-meter">
+                <div class="password-strength-value"></div>
+              </div>
+              <span class="password-strength-label"></span>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="user-role" class="form-label">Role</label>
+            <select class="form-control" id="user-role" name="role" required>
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+            <div id="user-role-error" class="form-error"></div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancel-add-user">Cancel</button>
+        <button class="btn btn-primary" id="save-user">
+          <span class="btn-text">Add User</span>
+          <span class="spinner-border spinner-border-sm d-none" id="add-user-spinner" role="status" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal for Delete -->
+  <div class="modal-overlay" id="delete-user-modal">
+    <div class="modal-container modal-sm">
+      <div class="modal-header">
+        <h3 class="modal-title">Confirm Deletion</h3>
+        <button class="modal-close" id="close-delete-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete user <strong id="delete-user-name"></strong>?</p>
+        <p class="text-danger">This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancel-delete">Cancel</button>
+        <button class="btn btn-danger" id="confirm-delete">
+          <span class="btn-text">Delete</span>
+          <span class="spinner-border spinner-border-sm d-none" id="delete-spinner" role="status" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/api/api.js"></script>
+  <script src="assets/js/api/auth.js"></script>
+  <script src="assets/js/utils/auth.js"></script>
+  <script src="assets/js/utils/validation.js"></script>
+  <script src="assets/js/components/toast.js"></script>
+  <script src="assets/js/components/modal.js"></script>
+  <script src="assets/js/pages/users.js"></script>
+</body>
+</html>
